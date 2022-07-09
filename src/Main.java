@@ -35,9 +35,13 @@ public class Main {
                     s.nextLine();
                     System.out.println("Enter the name:");
                     String nameInput = s.nextLine();
-                    System.out.println("Enter the number:");
-                    String numberInput = s.nextLine();
-                    mobile.addContact(nameInput, numberInput);
+                    if (!mobile.queryContact(nameInput)) {
+                        System.out.println("Enter the number:");
+                        String numberInput = s.nextLine();
+                        mobile.addContact(nameInput, numberInput);
+                    } else {
+                        System.out.println("Name already exists!");
+                    }
                     break;
                 case 4:
                     System.out.println("4. Update existing contact");
