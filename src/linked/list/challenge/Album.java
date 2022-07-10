@@ -1,17 +1,16 @@
 package linked.list.challenge;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 public class Album {
 
     public static ArrayList<Album> albums; // how to add this Album instance to a static ArrayList of the class within the constructor?
-    private final LinkedList<Song> albumTrackList;
+    private final ArrayList<Song> albumTrackList;
     private final String albumTitle;
 
     public Album(String albumTitle) {
         this.albumTitle = albumTitle;
-        this.albumTrackList = new LinkedList<>();
+        this.albumTrackList = new ArrayList<>();
     }
 
     public static Album newAlbum (String albumTitle) {
@@ -23,7 +22,7 @@ public class Album {
         return newAlbum;
     }
 
-    public LinkedList<Song> getAlbumTrackList() {
+    public ArrayList<Song> getAlbumTrackList() {
         return albumTrackList;
     }
 
@@ -31,13 +30,8 @@ public class Album {
         return albumTitle;
     }
 
-    public boolean addSong(Song song) {
-        if (songInAlbum(song)) {
-            return false;
-        } else {
-            albumTrackList.add(song);
-        }
-        return true;
+    public void addSong(Song song) {
+        albumTrackList.add(song);
     }
 
     private boolean songInAlbum(Song checkSong) {
@@ -56,12 +50,21 @@ public class Album {
     }
 
     // iterate through static list of albums to find album by song title
-    public static Album getAlbum(String title) {
+    public static Album getAlbumFromSongTitle(String songTitle) { // TESTED, this works
         for (Album album : albums) {
-            for (Song song : album.getAlbumTrackList()) {
-                if (title.equals(song.getSongTitle())) {
+            for (Song song : album.getAlbumTrackList()) { // tracklist is a linked list
+                if (songTitle.equals(song.getSongTitle())) {
                     return album;
                 }
+            }
+        }
+        return null;
+    }
+
+    public static Album getAlbumFromAlbumTitle(String albumTitle) {
+        for (Album album : albums) {
+            if (albumTitle.equals(album.getAlbumTitle())) {
+                return album;
             }
         }
         return null;

@@ -26,26 +26,30 @@ public class Ipod {
         // print all songs in playlist
         // print all songs by album
         // print all albums
+
+        Ipod test = new Ipod();
+        test.doWork();
+    }
+
+    private void doWork() {
         Song.newSong("8:16 AM", "Grassroots", 186);
         Song.newSong("Do You Right", "Music", 195);
         Song.newSong("My Stony Baby", "Grassroots", 203);
         playlist.add(Song.getSong("8:16 AM"));
         playlist.add(Song.getSong("Do You Right"));
         playlist.add(Song.getSong("My Stony Baby"));
-//        Song.newSong("My Stony Baby", "Grassroots", 203);
-
+//        System.out.println(Album.getAlbum("Do You Right").getAlbumTitle()); // Works
 //        Album.printAll();
 //        Song.printAll();
-
         System.out.println("Welcome to Ipod 3000!");
         ipodMenu();
-
     }
 
     public static void ipodMenu() {
         Scanner scanner = new Scanner(System.in);
         ListIterator<Song> i = playlist.listIterator();
         Song currentSong = null;
+        boolean playingForward = true;
         boolean quit = false;
         while (!quit) {
             System.out.println("1 - Quit");
@@ -55,6 +59,7 @@ public class Ipod {
             System.out.println("5 - Add song to playlist");
             System.out.println("6 - Remove song from the playlist");
             System.out.println("7 - List all songs in the playlist");
+            System.out.println("8 - List all songs in all albums");
             System.out.println("Please enter your selection: ");
             int input = scanner.nextInt();
 
@@ -67,29 +72,37 @@ public class Ipod {
                 case 2: {
                     if(playlist.isEmpty()) {
                         System.out.println("No songs in playlist!");
+                    } else if (!i.hasNext()) {
+                        currentSong = playlist.getLast();
                     } else {
-                        if(i.hasNext()) {
-                            currentSong = i.next();
-                            String song = currentSong.getSongTitle();
-                            String album = currentSong.getAlbumTitle();
-                            System.out.println("Playing song \"" + song + "\" from the album \"" + album + "\".\n");
-                        } else {
-                            System.out.println("End of playlist!");
+                        if(!playingForward) {
+                            i.next();
                         }
+                        currentSong = i.next();
                     }
+                    String song = currentSong.getSongTitle();
+                    String album = currentSong.getAlbumTitleFromSong();
+                    System.out.println("Playing song \"" + song + "\" from the album \"" + album + "\".\n");
+                    playingForward = true;
                     break;
                 }
                 case 3:{
                     if(playlist.isEmpty()) {
                         System.out.println("No songs in playlist!");
+                    } else if (!i.hasPrevious()) {
+                        currentSong = playlist.getFirst();
                     } else {
+                        if(playingForward) {
+                            i.previous();
+                        }
                         if (i.hasPrevious()) {
                             currentSong = i.previous();
-                            String song = currentSong.getSongTitle();
-                            String album = currentSong.getAlbumTitle();
-                            System.out.println("Playing song \"" + song + "\" from the album \"" + album + "\".\n");
                         }
                     }
+                    String song = currentSong.getSongTitle();
+                    String album = currentSong.getAlbumTitleFromSong();
+                    System.out.println("Playing song \"" + song + "\" from the album \"" + album + "\".\n");
+                    playingForward = false;
                     break;
                 }
                 case 4:{
@@ -100,7 +113,7 @@ public class Ipod {
                             currentSong = i.next();
                         }
                         String song = currentSong.getSongTitle();
-                        String album = currentSong.getAlbumTitle();
+                        String album = currentSong.getAlbumTitleFromSong();
                         System.out.println("Playing song \"" + song + "\" from the album \"" + album + "\".\n");
                     }
                     break;
@@ -127,6 +140,14 @@ public class Ipod {
                             index++;
                         }
                         System.out.println();
+                    }
+                    break;
+                }
+                case 8:{
+                    for(Album album : Album.albums) {
+                        for(Song song : album.getAlbumTrackList()) {
+                            System.out.println("Album: " + album.getAlbumTitle() + " Song: " + song.getSongTitle());
+                        }
                     }
                     break;
                 }
