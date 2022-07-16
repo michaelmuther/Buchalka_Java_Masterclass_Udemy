@@ -1,8 +1,10 @@
+package section_eight_arrays;
+
 import arrayList_challenge.MobilePhone;
 
 import java.util.Scanner;
 
-public class Main {
+public class SectionEightMain {
 
     static final Scanner s = new Scanner(System.in);
 
